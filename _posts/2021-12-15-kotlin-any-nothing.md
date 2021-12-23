@@ -116,11 +116,156 @@ class Food {
 컴파일러가 헷갈려할 때만 사용. `as`, `as?` 연산자를 이용할 수 있다. `as?` 연산자는 캐스팅이 실패하면 null을 할당.
 
 
-### 제네릭
+### 제네릭: 파라미터 타입의 가변성과 제약사항
 
 코드 재사용보다 타입 안전성이 우선이다. 제네릭은 이 두 사이의 균형을 맞춰준다.
+Java에서의 제너릭은 타입 불변성을 강요하지만, 코틀린에서는 이 제약에 예외를 적용시켰다.
+
+Java에서는 공변성을 (`<? extends T>` 문법을 이용해) 제너릭을 사용할때만 사용할 수 있으나, Kotlin에서는 사용할때든 선언할 때든 사용 가능하다. 반공변성도 마찬가지다(`<? super T>`).
+
+각각의 특징을 다음과 같이 이야기한다.
+
+- 사용처 가변성 - use-site variance | 타입 프로젝션, 
+- 선언처 가변성 - declaration-site variance
+
+### 타입 가변성; 타입 불변성
+
+`Fruit` 클래스에서 파생한 `Banana`, `Apple` 클래스가 있다고 하자. 그렇다고 다음 코드가 가능하지는 않다.
+
+```kotlin
+open class Fruit() {}
+class Banana : Fruit()
+class Apple : Fruit()
+
+fun copyFromTo(From: Array<Fruit>, to: Array<Fruit>) {
+  // ...
+}
+
+var bananas: Array<Banana>
 
 
-### 공변성, 반공변성, 타입 불변성, 
+var fruits = arrayOf(Fruit())
+var bananas = arrayOf(Banana())
 
-????? 공부 중입니다.
+copyFromTo(bananas, fruits) // Type mismatch: inferred type is Array<Banana> but Array<Fruit> was expected
+```
+
+그러나 Array가 아니고 List였다면?
+
+
+```kotlin
+fun copyFromTo(From: List<Fruit>, to: List<Fruit>) {
+  // ...
+}
+
+var bananas: Array<Banana>
+
+
+var fruits = listOf(Fruit())
+var bananas = listOf(Banana())
+
+copyFromTo(bananas, fruits) // No problem at all.
+```
+
+이는 Array 타입과 List 타입의 선언이 다음과 같기 때문이다. Kotlin에서 말하는 선언처 가변성의 예다.
+
+```kotlin
+class Array<T>
+interface List<out E>
+````
+
+**`out`이 핵심 키워드다.**
+
+
+```kotlin
+fun copyFromTo(From: Array<out Fruit>, to: Array<Fruit>) {
+  // ...
+}
+
+
+var fruits = arrayOf(Fruit())
+var bananas = arrayOf(Banana())
+
+copyFromTo(bananas, fruits) // No problem at all.
+```
+
+반공변성은 반대로 **`in`키워드를 사용한다.**
+
+
+
+```kotlin
+fun copyFromTo(From: Array<out Fruit>, to: Array<in Fruit>) {
+  // ...
+}
+
+var fruits = arrayOf(Any())
+var bananas = arrayOf(Banana())
+var sth = arrayOf(Any())
+
+copyFromTo(bananas, fruits) // No problem at all.
+copyFromTo(bananas, sth) // Type mismatch for sth but now works
+```
+
+
+### where을 사용한 파라미터 타입 제한
+
+타입 파라미터(T)에 다음과 같이 제한을 둘 수 있다.
+
+```kotlin
+// AutoClosable interface has close method
+fun <T: AutoClosable> kioskProcess(user_input: T) {
+  user_input.close()
+}
+```
+
+where 문을 이용해 두개 이상의 제약조건을 걸 수 있다.
+
+```kotlin
+// AutoClosable and Appendable interface has close method
+fun <T> kioskProcess2(user_input: T)
+  where T: AutoClosable,
+  T: Appendable {
+  user_input.append("Buy")
+  user_input.close()
+}
+```
+
+
+### 스타`*` 프로젝션
+
+스타 프로젝션은 제네릭 읽기전용 타입과 raw 타입을 위한 코틀린의 기능. raw 타입을 직접 만드는 것은 타입 안정성이 없고 가급적 피해야 한다. 그러나 스타 프로젝션을 통해 타입 안전성을 유지하면서 파라미터를 전달할 때 사용.
+
+아래에서 `*`는 `out T`와 같다.
+
+```kotlin
+fun copyFromTo(From: Array<out Fruit>, to: Array<*>) {
+  // ...
+}
+```
+이렇게 하면 함수 내에서 어떠한 쓰기도 금지된다. 스타 프로젝션이 만약 선언처 가변형에서 사용된다면 ìn Nothing`과 같아진다.
+
+
+### 구체화된 타입 파라미터
+
+Java의 타입 이레이져때문에 바이트코드로 변환될 때 타입 정보를 잃어버린다.자바에서는 이 경우에 해당 클래스의 인스턴스인지 알 수 있도록 클래스를 함수에 전달해 줘야 한다.  이는 Kotlin도 해결해야 하는 문제. 함수가 `inline`으로 선언되었다면 `reified`키워드를 활용하면 된다. 그러면 블럭 내에서 타입을 사용할 수 있다.
+
+```kotlin
+class Book () {}
+inline fun <reified T> findFirst(books: List<Book>): T {
+  var selected = books.filter { book -> book is T }
+  if(selected.size == 0) {
+    throw RuntimeException("404")
+  }
+  return selected[0] as T
+}
+```
+
+이렇게 하면 클래스를 전달하지 않고도 T를 타입 체크와 캐스팅용으로 사용할 수 있다. `inline`함수의 특성인데, 호출하는 부분에서 확장되기 때문에 T는 컴파일 시간에 확인되는 실제 타입으로 대체된다.
+
+훨씬 가독성이 좋은 코드다.
+
+```kotlin
+findFirst<NonFiction>(booksOnDesk).name;
+```
+
+`reified` 타입 함수들은 `lostOf<T>()`와 `mutableListOf<T>()`, klaxon 라이브러리의 `parse<T>`가 있다.
