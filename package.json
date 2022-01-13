@@ -4,8 +4,8 @@
   "description": "<!-- AUTO-GENERATED-CONTENT:START (STARTER) --> <p align=\"center\">   <a href=\"https://www.gatsbyjs.org\">     <img alt=\"Gatsby\" src=\"https://www.gatsbyjs.org/monogram.svg\" width=\"60\" />   </a> </p> <h1 align=\"center\">   Gatsby's hello-world starter </h1>",
   "scripts": {
     "install": "bundle install",
-    "build": "bundle exec jekyll build",
-    "serve": "bundle exec jekyll serve",
+    "dev": "jekyll serve --livereload",
+    "build": "jekyll build",
     "build:admin": "gulp"
   },
   "repository": {

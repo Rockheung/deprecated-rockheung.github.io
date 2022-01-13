@@ -78,9 +78,12 @@ code.highlighter-rouge {
   padding: 0 0.2rem;
 }
 
-ul,
-li {
+ul {
   list-style-type: none;
+}
+
+li {
+  list-style-type: "\2713\0001\0001"
 }
 
 div.w ul {
@@ -106,4 +109,8 @@ footer {
       font-size: 1.2rem;
     }
   }
+}
+
+.content p code {
+  display: unset;
 }

@@ -125,7 +125,7 @@ Java에서는 공변성을 (`<? extends T>` 문법을 이용해) 제너릭을 �
 
 각각의 특징을 다음과 같이 이야기한다.
 
-- 사용처 가변성 - use-site variance | 타입 프로젝션, 
+- 사용처 가변성 - use-site variance (타입 프로젝션) 
 - 선언처 가변성 - declaration-site variance
 
 ### 타입 가변성; 타입 불변성
