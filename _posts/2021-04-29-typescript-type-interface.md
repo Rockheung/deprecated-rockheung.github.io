@@ -1,4 +1,11 @@
-## Typescript 101
+---
+layout: post
+title: "TypeScript: Type, Interface"
+date: 2021-04-29 10:56:51.943 +0900
+categories: Study TypeScript
+tags: typescript modern
+---
+
 
 
 ### Type

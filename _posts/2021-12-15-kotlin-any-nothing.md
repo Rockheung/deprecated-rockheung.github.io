@@ -1,6 +1,10 @@
-
-
-## Kotlin - 06 오류를 예방하는 타입 안전성
+---
+layout: post
+title: "Kotlin: 오류를 예방하는 타입 안전성"
+date: 2021-12-15 10:56:51.943 +0900
+categories: Study Kotlin
+tags: kotlin
+---
 
 ### NullPointerException - 그럼 Null 이 뭔가?
 
