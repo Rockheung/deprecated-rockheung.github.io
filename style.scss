@@ -78,15 +78,15 @@ code.highlighter-rouge {
   padding: 0 0.2rem;
 }
 
-ul {
-  list-style-type: none;
+ol > li {
+  list-style-type: unset;
 }
 
-li {
+ul > li {
   list-style-type: "\2713\0020\0020"
 }
 
-div.w ul {
+div.w ul, div.w ol {
   padding-inline-start: 2rem;
 }
 
