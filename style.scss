@@ -78,16 +78,34 @@ code.highlighter-rouge {
   padding: 0 0.2rem;
 }
 
-ol > li {
-  list-style-type: unset;
+
+code.language-plaintext {
+  color: #880000;
+  background-color: #F0F0F0;
 }
 
-ul > li {
-  list-style-type: "\2713\0020\0020"
+@counter-style emoji-decimal {
+  system: numeric;
+  symbols: '\30\FE0F\20E3' '\31\FE0F\20E3' '\32\FE0F\20E3' '\33\FE0F\20E3' '\34\FE0F\20E3' '\35\FE0F\20E3' '\36\FE0F\20E3' '\37\FE0F\20E3' '\38\FE0F\20E3' '\39\FE0F\20E3';
+  suffix: "   ";
+}
+
+@counter-style balls {
+  system: fixed;
+  symbols:  "\26BD" "\1F3C0" "\26BE" "\1F3BE" "\1F3D0" "\1F3B1" "\1F3C8" "\1F3C9";
+  suffix: "   ";
+}
+
+ol {
+  list-style-type: emoji-decimal;
+}
+
+ul {
+  list-style-type: balls;
 }
 
 div.w ul, div.w ol {
-  padding-inline-start: 2rem;
+  padding-inline-start: 3rem;
 }
 
 div.w > ul > li {
@@ -109,8 +127,4 @@ footer {
       font-size: 1.2rem;
     }
   }
-}
-
-.content p code {
-  display: unset;
 }

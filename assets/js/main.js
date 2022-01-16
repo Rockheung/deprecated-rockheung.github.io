@@ -59,11 +59,8 @@ function footer_rainbow() {
   window.requestAnimationFrame(rainbow_step);
 }
 footer_rainbow();
+
 hljs.initHighlightingOnLoad();
-document.querySelectorAll(".content p code").forEach(function (elem) {
-  elem.classList.add("hljs");
-  elem.classList.add("hljs-string");
-});
 
 document.querySelectorAll("main span.date").forEach(function (datetimeEl) {
   moment.updateLocale("ko", {
