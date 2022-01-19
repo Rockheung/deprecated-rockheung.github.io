@@ -60,8 +60,6 @@ function footer_rainbow() {
 }
 footer_rainbow();
 
-hljs.initHighlightingOnLoad();
-
 document.querySelectorAll("main span.date").forEach(function (datetimeEl) {
   moment.updateLocale("ko", {
     weekdaysShort: ["일", "월", "화", "수", "목", "금", "토"],
