@@ -211,6 +211,7 @@ inline fun invokeTwo (
   action1: (Int) -> Unit,
   noinline action2: (Int) -> Unit
 ): (Int) -> Unit { ... }
+```
 
 action2 람다는 인라인 최적화에서 제외될 것이다.
 
@@ -232,7 +233,8 @@ inline fun invokeTwo (
 ): (Int) -> Unit {
   ...
   return { i: Int -> action2(n) }
- }
+}
+```
 
 
 ### 인라인과 리턴을 위한 연습
