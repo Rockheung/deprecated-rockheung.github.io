@@ -66,23 +66,24 @@ pre {
   -moz-tab-size: 2;
 }
 
-code,
-code span {
+code {
   font-family: "JetBrainsMono", monospace;
   font-size: 1.4rem;
   border-radius: 0.2rem;
   vertical-align: 0.1rem;
-}
-
-code.highlighter-rouge {
-  padding: 0 0.2rem;
-}
-
-
-code {
   color: unset;
   background-color: unset;
+  span {
+    font-family: inherit;
+    font-size: inherit;
+    border-radius: inherit;
+    vertical-align: inherit;
+  }
+  .highlighter-rouge {
+    padding: 0 0.2rem;
+  }
 }
+
 
 @counter-style emoji-decimal {
   system: numeric;
