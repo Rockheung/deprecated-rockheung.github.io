@@ -63,7 +63,7 @@ module.exports = {
 };
 ```
 
-```bash
+```shell
 npm install -g eslint-config-standard \
   eslint-plugin-import \
   eslint-plugin-node \
